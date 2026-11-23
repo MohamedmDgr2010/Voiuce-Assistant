@@ -1,0 +1,100 @@
+[
+    {
+        "name": "set_volume",
+        "description": "Set system volume",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "volume": {
+                    "type": "number",
+                    "description": "volume value 0% : 150%"
+                }
+            },
+            "required": [
+                "volume"
+            ]
+        }
+    },
+    {
+        "name": "set_bright",
+        "description": "Set screan bright",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "bright": {
+                    "type": "number",
+                    "description": "bright value 0% : 100%"
+                }
+            },
+            "required": [
+                "bright"
+            ]
+        }
+    },
+    {
+        "name": "get_volume",
+        "description": "Get system volume",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "get_bright",
+        "description": "Get screan bright",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "app_list",
+        "description": "Get a list of installed desktop applications",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "run_app",
+        "description": "Launch an installed desktop application by its desktop application ID",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "description": "Desktop application ID, for example org.gnome.Calculator.desktop"
+                }
+            },
+            "required": [
+                "app_id"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "web_search",
+        "description": "Search the internet and return relevant web pages",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The search query"
+                },
+                "max_results": {
+                    "type": "integer",
+                    "description": "Maximum number of results, between 1 and 10"
+                }
+            },
+            "required": [
+                "query"
+            ],
+            "additionalProperties": false
+        }
+    }
+]

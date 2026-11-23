@@ -1,0 +1,28 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# AI Models
+*.onnx
+*.mdl
+*.fst
+*.zip
+
+# Vosk
+vosk-model-*/
+
+# Temporary files
+*.wav
+*.mp3
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.onnx.json
+
+#Keys
+
+.env

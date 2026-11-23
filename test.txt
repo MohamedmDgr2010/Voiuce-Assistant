@@ -1,0 +1,14 @@
+openai/gpt-oss-safeguard-20b
+qwen/qwen3.8-27b
+whisper-large-v3
+meta-llama/llama-prompt-guard-2-86m
+canopylabs/orpheus-v1-english
+allam-2-7b
+openai/gpt-oss-20b
+canopylabs/orpheus-arabic-saudi
+whisper-large-v3-turbo
+openai/gpt-oss-120b
+meta-llama/llama-prompt-guard-2-22m
+Failed to execute tool set_bright: Command '['brightnessctl', 'set', '85.0%']' returned non-zero exit status 1.
+record stop
+Content: أنا بخير، شكرًا لسؤالك! كيف يمكنني مساعدتك اليوم؟
