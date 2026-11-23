@@ -83,7 +83,7 @@
 
 # except KeyboardInterrupt:
 #     print("\nStopped.")
-from w import *
+from win import *
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()

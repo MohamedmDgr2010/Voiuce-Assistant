@@ -19,15 +19,30 @@ import subprocess
 from openai import OpenAI
 model = Model("vosk-model-ar-mgb2-0.4")
 recognizer = KaldiRecognizer(model, 16000)
+import re
 
+def normalize_numbers(text):
+    arabic_digits = "٠١٢٣٤٥٦٧٨٩"
+    english_digits = "0123456789"
+
+    return text.translate(
+        str.maketrans(arabic_digits, english_digits)
+    )
 class Voice:
     
     
-
+    audio_chunks=None
+    
+    
+    SILENCE_THRESHOLD = 500  # عدّلها حسب مستوى الميكروفون والضوضاء المحيطة
+    SILENCE_DURATION = 1.0  # ثانية واحدة من الصمت بعد الكلام قبل الإرسال
+    SAMPLE_RATE =16000
+    BLOCKSIZE=12000
+    STT_MODEL=None
     @staticmethod
     def is_speech(pcm_int16: np.ndarray) -> bool:
         rms = np.sqrt(np.mean(pcm_int16.astype(np.float32) ** 2))
-        return rms > SILENCE_THRESHOLD
+        return rms > Voice.SILENCE_THRESHOLD
 
 
     @staticmethod
@@ -37,16 +52,16 @@ class Voice:
         now = timelib.monotonic()
         samples = np.frombuffer(indata, dtype=np.int16)
 
-        if is_speech(samples):
+        if Voice.is_speech(samples):
             speaking = True
             last_voice_time = now
-            audio_chunks.append(bytes(indata))
+            Voice.audio_chunks.append(bytes(indata))
         elif speaking:
-            audio_chunks.append(bytes(indata))
-            if last_voice_time is not None and (now - last_voice_time) >= SILENCE_DURATION:
+            Voice.audio_chunks.append(bytes(indata))
+            if last_voice_time is not None and (now - last_voice_time) >= Voice.SILENCE_DURATION:
                 # اكتمل الكلام: خذ البيانات وأفرغ البافر ثم أرسل في خيط/مهمة منفصلة
-                utterance = b"".join(audio_chunks)
-                audio_chunks.clear()
+                utterance = b"".join(Voice.audio_chunks)
+                Voice.audio_chunks.clear()
                 speaking = False
                 last_voice_time = None
         if status:
@@ -55,10 +70,10 @@ class Voice:
         if recognizer.AcceptWaveform(bytes(indata)):
             result = json.loads(recognizer.Result())
             text = result.get("text", "")
-
+            text=normalize_numbers(text)
             if text:
                 print(text, flush=True)
-                exe(text)
+                return text
     @staticmethod
     def stt(audio):
 
@@ -118,6 +133,6 @@ class Voice:
 
             audio = np.concatenate(self.audio, axis=0)
             sf.write("record.wav", audio, 16000, subtype="PCM_16")
-            text=Voice.stt(audio)
+            text=normalize_numbers(Voice.stt(audio))
 
             self.finished.emit(text)
