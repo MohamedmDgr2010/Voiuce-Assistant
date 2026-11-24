@@ -96,5 +96,126 @@
             ],
             "additionalProperties": false
         }
+    },
+    {
+        "name": "ls",
+        "description": "List files and directories at the specified path.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The path of the directory or file to inspect."
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "write_file",
+        "description": "Write file.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The path of the file ."
+                },
+                "content": {
+                    "type": "string",
+                    "description": "File content"
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "read_file",
+        "description": "Read file content.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The path of the file ."
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "mkdir",
+        "description": "Make new directorie.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The path of the directories."
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "save_user_data",
+        "description": "Save or update user data persistently.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "description": "Key-value pairs to save."
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "read_user_data",
+        "description": "Read previously saved user data. Can read all data or a specific key.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "The specific key to read. Leave omitted to read all data."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "set_session_info",
+        "description": "Set session name & id.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "session name."
+                },
+                "id": {
+                    "type": "string",
+                    "description": "session id."
+                }
+            },
+            "additionalProperties": false
+        }
     }
 ]

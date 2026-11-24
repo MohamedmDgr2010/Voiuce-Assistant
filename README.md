@@ -13,6 +13,8 @@
   - Using local STT model.
   - Using local TTS model.
   - Free & OpenSource.
+  - Saves user **data in your device**
+  - Can not access **ROOT** user
     
 <hr style="height: 4px; background-color: black; border: none;">
 
@@ -30,7 +32,7 @@
   - استخدام نموذج محلي لتحويل الصوت إلى نص (STT).
   - استخدام نموذج محلي لتحويل النص إلى صوت (TTS).
   - مجاني ومفتوح المصدر.
-
-
+  -  يحفظ بياناتك في جهازك
+  - لا يصل إلى صلاحيات **الروت**
 Mohamed Al-Moiz
 محمد المعز

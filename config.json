@@ -1,0 +1,7 @@
+{
+    "stt":"",
+    "llm":"openai/gpt-oss-120b",
+    "tts":"ar_JO-kareem-medium.onnx",
+    "api_url":"",
+    "local_sound":true
+}

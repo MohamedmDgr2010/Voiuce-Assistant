@@ -4,9 +4,9 @@
 # import sounddevice as sd
 # import json
 # from vosk import Model, KaldiRecognizer
-# from ai import send
+# from agentimport send
 # import numpy as np
-# from c_input import Voice
+# from voice import Voice
 # MODEL_PATH = "./vosk-model-ar-mgb2-0.4"
 # SAMPLE_RATE = 16000
 # BLOCKSIZE = 1024*12  # ~64ms لكل بلوك عند 16kHz
@@ -83,8 +83,34 @@
 
 # except KeyboardInterrupt:
 #     print("\nStopped.")
+
 from win import *
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-sys.exit(app.exec())
+
+class Config:
+    api_url:str
+    llm:str
+    stt:str
+    tts:str
+    local_sound:bool
+    def __init__(self,**data):
+        self.__dict__.update(data)
+class App:
+    def __init__(self):
+        
+        try:
+            with open("config.json","r") as config_file:
+                self.config=Config(**json.load(config_file))
+        except Exception as e:
+            print(f"Failed to load config file: {e}")
+            sys.exit()
+            
+        Agent.LLM_MODEL=self.config.llm
+        Agent.STT_MODEL=self.config.stt
+        Agent.TTS_MODEL=self.config.tts
+        Agent.api_url=self.config.api_url
+        self.app = QApplication(sys.argv)
+        self.window = MainWindow()
+        self.window.show()
+        sys.exit(self.app.exec())
+
+App()
