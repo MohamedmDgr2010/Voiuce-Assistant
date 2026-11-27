@@ -34,5 +34,35 @@
   - مجاني ومفتوح المصدر.
   -  يحفظ بياناتك في جهازك
   - لا يصل إلى صلاحيات **الروت**
+
+## Setup التهيئة
+```sh
+git clone https://github.com/MohamedmDgr2010/Voiuce-Assistant.git agent
+cd agent
+```
+### Windows
+```sh
+mkdir %LOCALAPPDATA%/hamedi/
+```
+### LINUX
+```sh
+mkdir $HOME/.local/share/hamedai/
+```
+## INSTALL Python packages  تثبيت مكتبات بايثون
+```sh
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+mkdir models
+cd models
+wget https://alphacephei.com/vosk/models/vosk-model-ar-mgb2-0.4.zip
+unzip vosk-model-ar-mgb2-0.4.zip
+cd ..
+```
+## Run التشغيل
+```sh
+# You must add API key efore run to process you tasks!
+python main.py
+```
 Mohamed Al-Moiz
 محمد المعز

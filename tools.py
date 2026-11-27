@@ -5,6 +5,9 @@ from ddgs import DDGS
 import os
 from session import Session
 
+from pathlib import Path
+from steam.utils.appcache import parse_appinfo
+
 
 class ToolRegistry:
     def __init__(self):
@@ -250,7 +253,39 @@ def run_steam_game(app_id: str):
     subprocess.run(["steam", f"steam://rungameid/{app_id}"],check=False)
     print(f"Open Game: {app_id}")
 
+def steam_lib():
+        
+    path = (
+        Path.home()
+        / ".steam/steam/appcache/appinfo.vdf"
+    )
+    res=[]
+    with path.open("rb") as f:
+        header, apps = parse_appinfo(f)
 
+        print("Steam format:", header)
+
+        for app in apps:
+            data = app.get("data", {})
+            info = data.get("appinfo", {})
+            common = info.get("common", {})
+
+            name = common.get("name")
+            type=common.get("type","unknoun").lower()
+            if name:
+                print(app["appid"], name)
+                if type=="game" or type=="demo" or type=="application" or type=="beta":
+                    res.append({"name":name,"appid":app["appid"]}) 
+                    print("----- + -------")
+                else:
+                    print(f"{name} dont added --- type: {type}\nApp:{app}\n")
+                
+    return res
+
+def install_steam_game(app_id):
+    subprocess.run(["steam",f"steam://install/{app_id}"])
+    return {"success":"Sent requist to steam","message":"Sent install requist to steam"}
+                
 # Register tools
 
 registry = ToolRegistry()
@@ -271,3 +306,5 @@ registry.register("read_user_data", read_user_data)
 registry.register("set_session_info", set_session_info)
 registry.register("run_steam_game", run_steam_game)
 registry.register("steam_games_list", steam_games_list)
+registry.register("steam_lib",steam_lib)
+registry.register("install_steam_game",install_steam_game)

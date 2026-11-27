@@ -248,5 +248,32 @@
             "required": [],
             "additionalProperties": false
         }
+    },
+    {
+        "name": "steam_lib",
+        "description": "Get all games in steam libabry (installed or not installed)",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "install_steam_game",
+        "description": "Requist steam to install game by steam game ID",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "description": "Steam Game ID"
+                }
+            },
+            "required": [
+                "app_id"
+            ],
+            "additionalProperties": false
+        }
     }
 ]

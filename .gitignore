@@ -20,6 +20,7 @@ build/
 build*/
 *dist/
 dist/
+test.py
 # Vosk
 *model-*/
 models/
