@@ -53,7 +53,7 @@ def app_list():
     return apps
 
 
-def run_app(app_id):
+def run_app(app_id,args =[]):
     if not isinstance(app_id, str) or not app_id.endswith(".desktop"):
         raise ValueError("Invalid application ID")
 
@@ -66,7 +66,7 @@ def run_app(app_id):
         target = directory / app_id
 
         if target.is_file():
-            subprocess.Popen(["gtk-launch", app_id.removesuffix(".desktop")])
+            subprocess.Popen(["gtk-launch", app_id.removesuffix(".desktop"),*args])
             return {"success": True, "app": app_id}
 
     raise ValueError("Application not found")

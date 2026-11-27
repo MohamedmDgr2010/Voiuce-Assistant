@@ -68,6 +68,10 @@
                 "app_id": {
                     "type": "string",
                     "description": "Desktop application ID, for example org.gnome.Calculator.desktop"
+                },
+                "args":{
+                    "type":"array",
+                    "description":"app args"
                 }
             },
             "required": [

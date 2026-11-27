@@ -3,16 +3,26 @@
 venv/
 __pycache__/
 *.pyc
-
+dist
 # AI Models
 *.onnx
 *.mdl
 *.fst
 *.zip
 
+# build
+*.c
+*.h
+*cpp
+*hpp
+build/
+*build/
+build*/
+*dist/
+dist/
 # Vosk
-vosk-model-*/
-
+*model-*/
+models/
 # Temporary files
 *.wav
 *.mp3
@@ -25,4 +35,6 @@ vosk-model-*/
 
 #Keys
 
-.env
+.envagent
+agent
+agent
