@@ -127,11 +127,27 @@ class App:
         print(f"App Mode: {self.Mode}")
         Agent.api_url = self.config.api_url
         self.app = QApplication(sys.argv)
-        self.window = MainWindow()
+        self.window = None
         self.live=Voice.Live()
         self.speeker=None
         self.live.talk.connect(self.talk)
+        self.Tray = QSystemTrayIcon()
+        self.menu = QMenu()
         
+        self.show_act = QAction("Show")
+        self.hide_act = QAction("Hide")
+        self.quit_act = QAction("Quit")
+        
+        self.show_act.triggered.connect(self.startChatMode)  
+        self.hide_act.triggered.connect(self.startSoundMode)           
+        self.quit_act.triggered.connect(sys.exit)
+    
+        self.menu.addAction(self.show_act)
+        self.menu.addAction(self.hide_act)
+        self.menu.addAction(self.quit_act)
+        
+        self.Tray.setContextMenu(self.menu)
+        self.Tray.show()
         match self.Mode:
             case AppMode.CHAT:
                 self.window=MainWindow()
@@ -142,10 +158,20 @@ class App:
 
                 sys.exit(1)
         
-        sys.exit(self.app.exec())
         
+        
+        sys.exit(self.app.exec())
     def startSoundMode(self):
+        self.window.hide()
+        self.window=None
+        self.Mode=AppMode.SOUND
+        print("...........................Starting Sound Mode............................")
         self.live.start()
+    def startChatMode(self):
+        if not self.window or not self.window.isVisible():
+            self.window=MainWindow()
+            self.window.show()
+        
     def talk(self,text):
         print(f"User sayed: {text}")
         if self.is_talks_bot(text):
