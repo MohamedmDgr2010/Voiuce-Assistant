@@ -53,7 +53,7 @@ def app_list():
     return apps
 
 
-def run_app(app_id,args =[]):
+def run_app(app_id, args=[]):
     if not isinstance(app_id, str) or not app_id.endswith(".desktop"):
         raise ValueError("Invalid application ID")
 
@@ -66,7 +66,7 @@ def run_app(app_id,args =[]):
         target = directory / app_id
 
         if target.is_file():
-            subprocess.Popen(["gtk-launch", app_id.removesuffix(".desktop"),*args])
+            subprocess.Popen(["gtk-launch", app_id.removesuffix(".desktop"), *args])
             return {"success": True, "app": app_id}
 
     raise ValueError("Application not found")
@@ -181,34 +181,21 @@ def read_user_data(key: str = None):
 
     try:
         if not path.exists():
-            return {
-                "success": False,
-                "error": "User data file does not exist"
-            }
+            return {"success": False, "error": "User data file does not exist"}
 
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         if key:
-            return {
-                "success": key in data,
-                "key": key,
-                "value": data.get(key)
-            }
+            return {"success": key in data, "key": key, "value": data.get(key)}
 
-        return {
-            "success": True,
-            "data": data
-        }
+        return {"success": True, "data": data}
 
     except (OSError, json.JSONDecodeError) as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        return {"success": False, "error": str(e)}
 
 
-def save_user_data(data:dict):
+def save_user_data(data: dict):
     path = Path.home() / ".agent" / "user_data.json"
 
     try:
@@ -231,10 +218,38 @@ def save_user_data(data:dict):
         return {"success": False, "error": str(e)}
 
 
-def set_session_info(name:str,id:str):
-    Session.session_id=id
-    Session.session_name=name
-    return {"success":True}
+def set_session_info(name: str, id: str):
+    Session.session_id = id
+    Session.session_name = name
+    return {"success": True}
+
+
+import glob, vdf
+
+
+def steam_games_list():
+    res = []
+    for file in glob.glob(
+        os.path.expanduser("~/.steam/steam/userdata/*/config/shortcuts.vdf")
+    ):
+        with open(file, "rb") as f:
+            data = vdf.binary_load(f)
+
+        for game in data.get("shortcuts", {}).values():
+            res.append(
+                {
+                    "name": game.get("AppName", "<unknown>"),
+                    "appid": str(((game.get("appid", 0) & 0xFFFFFFFF) << 32) | 0x02000000)
+                }
+            )
+    print(f"Steam Games:\n{res}")
+    return res
+
+
+def run_steam_game(app_id: str):
+    subprocess.run(["steam", f"steam://rungameid/{app_id}"],check=False)
+    print(f"Open Game: {app_id}")
+
 
 # Register tools
 
@@ -251,6 +266,8 @@ registry.register("write_file", write_file)
 registry.register("read_file", read_file)
 registry.register("ls", ls)
 registry.register("mkdir", mkdir)
-registry.register("save_user_data",save_user_data)
-registry.register("read_user_data",read_user_data)
-registry.register("set_session_info",set_session_info)
+registry.register("save_user_data", save_user_data)
+registry.register("read_user_data", read_user_data)
+registry.register("set_session_info", set_session_info)
+registry.register("run_steam_game", run_steam_game)
+registry.register("steam_games_list", steam_games_list)

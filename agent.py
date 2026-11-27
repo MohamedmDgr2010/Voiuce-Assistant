@@ -10,6 +10,7 @@ import subprocess
 from openai import OpenAI
 
 from session import Session
+import soundfile as sf
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
@@ -48,6 +49,9 @@ class WorkerService(QThread):
         self.finished.emit("")
 
 
+from player import AudioPlayer
+
+
 # tools = [{"type": "function", "function": tool} for tool in definitions]
 class Agent:
     speeking: bool = False
@@ -58,9 +62,11 @@ class Agent:
     STT_MODEL: str
     TTS_MODEL: str
     LLM_MODEL: str
+    AudioPlay = AudioPlayer()
 
     @staticmethod
     def speek(text: str) -> None:
+
         if not text or not text.strip():
             return
 
@@ -87,7 +93,8 @@ class Agent:
                 print(result.stderr)
                 return
 
-            subprocess.run(["paplay", "/tmp/agent-sounde.wav"])
+            audio, sr = sf.read("/tmp/agent-sounde.wav", dtype="int16")
+            Agent.AudioPlay.play(audio, sr)
         except Exception as ex:
             print(f"Speek failed {ex}")
 

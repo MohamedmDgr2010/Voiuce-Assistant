@@ -69,7 +69,6 @@
 #     send(text)
 
 
-
 # try:
 #     with sd.RawInputStream(
 #         samplerate=SAMPLE_RATE,
@@ -85,32 +84,80 @@
 #     print("\nStopped.")
 
 from win import *
+from enum import Enum
+from pathlib import Path
+import os
+
+
+class AppMode(Enum):
+    SOUND = 1
+    CHAT = 2
+
 
 class Config:
-    api_url:str
-    llm:str
-    stt:str
-    tts:str
-    local_sound:bool
-    def __init__(self,**data):
+    api_url: str
+    llm: str
+    stt: str
+    tts: str
+    local_sound: bool
+    default_mode: AppMode = AppMode.CHAT
+
+    def __init__(self, **data):
         self.__dict__.update(data)
+
+
 class App:
+    Mode: AppMode = AppMode.CHAT
+
     def __init__(self):
-        
+
         try:
-            with open("config.json","r") as config_file:
-                self.config=Config(**json.load(config_file))
+            self.localData = Path(os.environ["HOME"]) / ".local" / "share" / "hamedi"
+            with open(self.localData / "config.json", "r") as config_file:
+                self.config = Config(**json.load(config_file))
+
         except Exception as e:
             print(f"Failed to load config file: {e}")
             sys.exit()
-            
-        Agent.LLM_MODEL=self.config.llm
-        Agent.STT_MODEL=self.config.stt
-        Agent.TTS_MODEL=self.config.tts
-        Agent.api_url=self.config.api_url
+
+        Agent.LLM_MODEL = self.config.llm
+        Agent.STT_MODEL = self.config.stt
+        Agent.TTS_MODEL = self.config.tts
+        self.Mode = AppMode(self.config.default_mode)
+        print(f"App Mode: {self.Mode}")
+        Agent.api_url = self.config.api_url
         self.app = QApplication(sys.argv)
         self.window = MainWindow()
-        self.window.show()
+        self.live=Voice.Live()
+        self.speeker=None
+        self.live.talk.connect(self.talk)
+        
+        match self.Mode:
+            case AppMode.CHAT:
+                self.window=MainWindow()
+                self.window.show()
+            case AppMode.SOUND:
+                self.startSoundMode()
+            case _:
+
+                sys.exit(1)
+        
         sys.exit(self.app.exec())
+        
+    def startSoundMode(self):
+        self.live.start()
+    def talk(self,text):
+        print(f"User sayed: {text}")
+        if self.is_talks_bot(text):
+            Agent.send(text)
+            self.say(Agent.res)
+        pass
+    def is_talks_bot(self,text)->bool:
+        return True
+    def say(self,text):
+        if self.Mode==AppMode.SOUND:
+            self.speeker=WorkerService(Agent.speek,text=text)
+            self.speeker.start()
+
 
 App()

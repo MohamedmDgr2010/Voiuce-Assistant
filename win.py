@@ -237,9 +237,7 @@ class MainWindow(QWidget):
         if available.bottom() < screen.geometry().bottom():
             return available.bottom()
         probe = QWidget()
-        probe.setWindowFlags(
-            Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool
-        )
+        probe.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool)
         probe.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         probe.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         probe.showMaximized()
@@ -255,7 +253,8 @@ class MainWindow(QWidget):
             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
         )
         self.setFixedSize(600, 85)
-
+        # 
+        
         screen = QApplication.primaryScreen()
         geometry = screen.geometry()
         bottom = self.workarea_bottom()
@@ -282,23 +281,7 @@ class MainWindow(QWidget):
         self.audio = []
         self.recording = False
 
-        self.Tray = QSystemTrayIcon()
-        self.menu = QMenu()
-
-        self.show_act = QAction("Show", self)
-        self.hide_act = QAction("Hide", self)
-        self.quit_act = QAction("Quit", self)
-
-        self.show_act.triggered.connect(lambda: setattr(self, "listening", False))
-        self.hide_act.triggered.connect(self.listen_mode)
-        self.quit_act.triggered.connect(sys.exit)
-
-        self.menu.addAction(self.show_act)
-        self.menu.addAction(self.hide_act)
-        self.menu.addAction(self.quit_act)
-
-        self.Tray.setContextMenu(self.menu)
-        self.Tray.show()
+        
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setStyleSheet(self.STYLE_SHEET)
 

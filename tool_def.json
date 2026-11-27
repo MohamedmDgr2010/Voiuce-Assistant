@@ -69,9 +69,9 @@
                     "type": "string",
                     "description": "Desktop application ID, for example org.gnome.Calculator.desktop"
                 },
-                "args":{
-                    "type":"array",
-                    "description":"app args"
+                "args": {
+                    "type": "array",
+                    "description": "app args"
                 }
             },
             "required": [
@@ -219,6 +219,33 @@
                     "description": "session id."
                 }
             },
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "run_steam_game",
+        "description": "Launch steam game by steam game ID",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "description": "Steam Game ID"
+                }
+            },
+            "required": [
+                "app_id"
+            ],
+            "additionalProperties": false
+        }
+    },
+    {
+        "name": "steam_games_list",
+        "description": "Get List of Steam installed games ",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": [],
             "additionalProperties": false
         }
     }

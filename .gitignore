@@ -36,6 +36,7 @@ models/
 #Keys
 
 .envagent
+.env
 agent
 agent
 agent
